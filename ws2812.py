@@ -22,10 +22,10 @@ T1L: 0.60   -> 4p=0.625 3p=0.47
 """
 
 def write2812_numpy4(spi, data):
-  d=numpy.array(data).ravel()
-  tx=numpy.zeros(len(d)*4, dtype=numpy.uint8)
+  d = numpy.array(data).ravel()
+  tx = numpy.zeros(len(d)*4, dtype=numpy.uint8)
   for ibit in range(4):
-    tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 +  0x88
+    tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 + 0x88
   tx = numpy.insert(tx, 0, 0x00)
   spi.max_speed_hz = int(4/1.05e-6)
   spi.writebytes(tx.tolist())
@@ -50,9 +50,10 @@ def usage():
   print("Usage:")
   print("-h", "--help")
   print("-c", "--color")
-  print("-n", "--nLED")
+  print("-n", "--nLED", "default=8")
   print("-t", "--test")
   print("-z", "--clear")
+  print("-s", "--SPI", "default=0")
 
 if __name__=="__main__":
   import spidev, time, getopt
@@ -71,7 +72,7 @@ if __name__=="__main__":
     write2812_pylist4(spi, [[0,0,0]]*nLED)
 
   try:
-    opts, args = getopt.getopt(sys.argv[1:], "htzn:c:", ["help", "color=", "nLED=", "test", "clear"])
+    opts, args = getopt.getopt(sys.argv[1:], "htzn:c:s:", ["help", "color=", "nLED=", "test", "clear", "SPI="])
   except getopt.GetoptError as err:
     # print help information and exit:
     print(str(err)) # will print something like "option -a not recognized"
@@ -79,6 +80,7 @@ if __name__=="__main__":
     sys.exit(2)
   color=None
   nLED=8
+  nSPI=0
   doTest=False
   doClear=False
   for o, a in opts:
@@ -89,13 +91,15 @@ if __name__=="__main__":
       color=a
     elif o in ("-n", "--nLED"):
       nLED=int(a)
+    elif o in ("-s", "--nSPI"):
+      nSPI=int(a)
     elif o in ("-t", "--test"):
       doTest=True
     elif o in ("-z", "--clear"):
       doClear=True
 
   spi = spidev.SpiDev()
-  spi.open(0,0)
+  spi.open(nSPI,0)
 
   if color!=None:
     write2812_pylist4(spi, eval(color)*nLED)
