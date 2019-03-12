@@ -1,17 +1,18 @@
-import numpy as np
+import numpy
 import signal, sys, time
 import spidev, ws2812, colorsys
-
-spi = spidev.SpiDev()
-spi.open(0,0)
 
 PIXELS = 150
 BRIGHTNESS = 255
 VELOCITY = 10
+SPI_DEVICE = 0
+
+spi = spidev.SpiDev()
+spi.open(SPI_DEVICE, 0)
 
 def signal_handler(sig, frame):
   print('You pressed Ctrl+C!')
-  data = np.zeros((PIXELS, 3), dtype=np.uint8)
+  data = numpy.zeros((PIXELS, 3), dtype=numpy.uint8)
   ws2812.write2812(spi, data)
   sys.exit(0)
 
@@ -25,7 +26,7 @@ def gamma(c):
   b = max(min(int(c[2]), 255), 0)
   return (r, g, b)
 
-data = np.zeros((PIXELS, 3), dtype=np.uint8)
+data = numpy.zeros((PIXELS, 3), dtype=numpy.uint8)
 while True:
   t = time.time() / VELOCITY
   for i in range(PIXELS):
