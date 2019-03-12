@@ -25,21 +25,18 @@ def write2812_numpy4(spi, data):
 def write2812_pylist4(spi, data):
     tx=[]
     for rgb in data:
-        for byte in rgb: 
+        for byte in rgb:
             for ibit in range(3,-1,-1):
-                #print ibit, byte, ((byte>>(2*ibit+1))&1), ((byte>>(2*ibit+0))&1), [hex(v) for v in tx]
                 tx.append(((byte>>(2*ibit+1))&1)*0x60 +
                           ((byte>>(2*ibit+0))&1)*0x06 +
                           0x88)
-    #print [hex(v) for v in tx]
-    spi.xfer(tx, int(4/1.05e-6))
-
+    spi.max_speed_hz = int(4/1.05e-6)
+    spi.writebytes(tx)
 
 if NumpyImported:
     write2812=write2812_numpy4
 else:
-    write2812=write2812_pylist4    
-
+    write2812=write2812_pylist4
 
 if __name__=="__main__":
     import spidev
@@ -52,15 +49,15 @@ if __name__=="__main__":
         #This will send the following colors:
         #   Red, Green, Blue,
         #   Purple, Cyan, Yellow,
-        #   Black(off), White 
+        #   Black(off), White
         write2812(spi, [[10,0,0], [0,10,0], [0,0,10],
                         [0,10,10], [10,0,10], [10,10,0],
                         [0,0,0], [10,10,10]])
     def test_off(spi, nLED=8):
         #switch all nLED chips OFF.
         write2812(spi, [[0,0,0]]*nLED)
-    
-    
+
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hn:c:t", ["help", "color=", "test"])
     except getopt.GetoptError as err:
