@@ -38,6 +38,14 @@ if NumpyImported:
 else:
     write2812=write2812_pylist4
 
+def usage():
+  print("Usage:")
+  print("-h", "--help")
+  print("-c", "--color")
+  print("-n", "--nLED")
+  print("-t", "--test")
+  print("-z", "--clear")
+
 if __name__=="__main__":
     import spidev
     import time
@@ -50,16 +58,16 @@ if __name__=="__main__":
         #   Red, Green, Blue,
         #   Purple, Cyan, Yellow,
         #   Black(off), White
-        write2812(spi, [[10,0,0], [0,10,0], [0,0,10],
+        write2812_pylist4(spi, [[10,0,0], [0,10,0], [0,0,10],
                         [0,10,10], [10,0,10], [10,10,0],
                         [0,0,0], [10,10,10]])
-    def test_off(spi, nLED=8):
+    def test_clear(spi, nLED=8):
         #switch all nLED chips OFF.
-        write2812(spi, [[0,0,0]]*nLED)
+        write2812_pylist4(spi, [[0,0,0]]*nLED)
 
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hn:c:t", ["help", "color=", "test"])
+        opts, args = getopt.getopt(sys.argv[1:], "hn:c:t:z", ["help", "color=", "nLED=", "test", "clear"])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
@@ -68,6 +76,7 @@ if __name__=="__main__":
     color=None
     nLED=8
     doTest=False
+    doClear=False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -78,15 +87,18 @@ if __name__=="__main__":
             nLED=int(a)
         elif o in ("-t", "--test"):
             doTest=True
-            assert False, "unhandled option"
+        elif o in ("-z", "--clear"):
+            doClear=True
 
     spi = spidev.SpiDev()
     spi.open(0,0)
 
     if color!=None:
-        write2812(spi, eval(color)*nLED)
+        write2812_pylist4(spi, eval(color)*nLED)
     elif doTest:
-        test_fixed(spi, nLED)
+        test_fixed(spi)
+    elif doClear:
+        test_clear(spi)
     else:
         usage()
 
