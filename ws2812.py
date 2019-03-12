@@ -18,12 +18,13 @@ def write2812_numpy4(spi, data):
     d=numpy.array(data).ravel()
     tx=numpy.zeros(len(d)*4, dtype=numpy.uint8)
     for ibit in range(4):
-        tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 +  0x88
+      tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 +  0x88
+    tx = numpy.insert(tx, 0, 0x00)
     spi.max_speed_hz = int(4/1.05e-6)
     spi.writebytes(tx.tolist())
 
 def write2812_pylist4(spi, data):
-    tx=[]
+    tx=[0x00]
     for rgb in data:
         for byte in rgb:
             for ibit in range(3,-1,-1):
@@ -67,7 +68,7 @@ if __name__=="__main__":
 
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hn:c:t:z", ["help", "color=", "nLED=", "test", "clear"])
+        opts, args = getopt.getopt(sys.argv[1:], "hntz:c", ["help", "color=", "nLED=", "test", "clear"])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
