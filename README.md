@@ -106,6 +106,29 @@ spi.open(1,0)
 ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
 ```
 
+## problem: first led is always green
+/usr/local/lib/python3.7/dist-packages/ws2812.py
+```
+def write2812(spi, colors):
+  # Optimized version of the `write2812_pylist4` function at:
+  # https://github.com/joosteto/ws2812-spi/blob/master/ws2812.py
+  # with this fix (0x00 at the beginning): https://github.com/joosteto/ws2812-spi/issues/2
+  tx = [0x00] + [
+     ((byte >> (2 * ibit + 1)) & 1) * 0x60 +
+     ((byte >> (2 * ibit + 0)) & 1) * 0x06 +
+     0x88
+     for rgb in colors
+     for byte in rgb # (rgb.g, rgb.r, rgb.b)  # the LED strip is GRB
+     for ibit in range(3, -1, -1)
+  ]
+
+  # Using xfer() or xfer2() in place of writebytes() causes the LEDs to flicker after the 5th one
+  # reports of this bug:
+  # 1) https://github.com/doceme/py-spidev/issues/72
+  # 2) https://github.com/joosteto/ws2812-spi/issues/6
+  spi.writebytes(tx)
+```
+
 # Notes #
 Note: this module tries to use numpy, if available.
 Without numpy it still works, but is *really* slow (more than a second
