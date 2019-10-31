@@ -56,7 +56,7 @@ ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
 
 # Orange Pi (Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59)
 
-##
+## install
 sudo armbian-config
 System -> Toggle hardware configuration -> spi-spidev
 (didn't specify SPI1, there is no pinout for SPI0, SPI0 is for flash)
@@ -69,7 +69,28 @@ Now you get /dev/spidev1.0.
 
 Datapin to pin19/SPI1_MOSI/PA15. GND->GND, VCC->5V.
 
+/etc/udev/rules.d/50-spi.rules:
+```
+SUBSYSTEM=="spidev", GROUP="spiuser", MODE="0660"
+```
 
+```
+sudo groupadd spiuser
+sudo adduser "$USER" spiuser
+sudo udevadm control --reload-rules
+sudo modprobe -r spidev; sudo modprobe spidev
+```
+
+## python and modules
+```
+sudo apt install python3-pip
+sudo pip3 install setuptools
+sudo pip3 install wheel
+sudo apt install libpython3.7-dev
+sudo pip3 install spidev
+sudo pip3 install git+https://github.com/joosteto/ws2812-spi
+sudo sed -i 's/str(err)/(str(err))/g' /usr/local/lib/python3.7/dist-packages/ws2812.py
+```
 
 
 # Notes #
