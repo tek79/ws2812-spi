@@ -1,4 +1,4 @@
-# ws2812-spi #
+# ws2812-spi
 This module contains python routines to program the WS2812 RGB LED chips on the raspberry,
 using the hardware SPI MOSI (so no other hardware is needed)
 
@@ -10,7 +10,8 @@ timing requirements.
 More info on the WS2812: https://wp.josh.com/2014/05/13/ws2812-neopixels-are-not-so-finicky-once-you-get-to-know-them/
 
 # Raspberry Pi
-## Wiring of WS2812-Raspberry #
+
+## Wiring of WS2812-Raspberry
 Connections from the Raspberry to the WS2812:
 ```
 WS2812     Raspbery
@@ -23,7 +24,7 @@ Of course the WS2812 can (should) be chained, the DOUT of the first
 connected to the DIN of the next, and so on.
 
 
-## Setup SPI on Raspberry #
+## Setup SPI on Raspberry
 First, enable the SPI hardware module on the SPI, using raspi-config, in
 Advanced Options / SPI, and enabling the SPI interface and the module loading:
     sudo raspi-config
@@ -37,7 +38,7 @@ make
 make install
 ```
 
-# Testing this ws2812.py module #
+## Testing this ws2812.py module
 This module can be tested using:
     python ws2812.py
 
@@ -52,7 +53,25 @@ spi.open(0,0)
 #write 4 WS2812's, with the following colors: red, green, blue, yellow
 ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
 ```
-    
+
+# Orange Pi (Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59)
+
+##
+sudo armbian-config
+System -> Toggle hardware configuration -> spi-spidev
+(didn't specify SPI1, there is no pinout for SPI0, SPI0 is for flash)
+edit /boot/armbianEnv.txt and add "param_spidev_spi_bus=1":
+```
+overlays=spi-spidev usbhost2 usbhost3
+param_spidev_spi_bus=1
+```
+Now you get /dev/spidev1.0.
+
+Datapin to pin19/SPI1_MOSI/PA15. GND->GND, VCC->5V.
+
+
+
+
 # Notes #
 Note: this module tries to use numpy, if available.
 Without numpy it still works, but is *really* slow (more than a second
