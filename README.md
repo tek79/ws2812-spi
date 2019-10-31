@@ -95,15 +95,16 @@ sudo pip3 install git+https://github.com/joosteto/ws2812-spi
 sudo sed -i 's/str(err)/(str(err))/g' /usr/local/lib/python3.7/dist-packages/ws2812.py
 ```
 
-## test
+## Test
 ```
+#!/usr/bin/env python3
 import spidev
 import ws2812
 spi = spidev.SpiDev()
 spi.open(1,0) # use spi.open(0,0) with Orange Pi PC
 
 #write 4 WS2812's, with the following colors: red, green, blue, yellow
-ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
+ws2812.write2812(spi, [[0,10,0], [10,0,0], [0,0,10], [10, 10, 0]])
 ```
 
 ## Problems
