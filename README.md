@@ -14,7 +14,7 @@ More info on the WS2812: https://wp.josh.com/2014/05/13/ws2812-neopixels-are-not
 ## Wiring of WS2812-Raspberry
 Connections from the Raspberry to the WS2812:
 ```
-WS2812     Raspbery
+WS2812     Raspberry
 GND   --   GND. At least one of pin 6, 9, 14, 20, 25
 DIN   --   MOSI, Pin 19, GPIO 10
 VCC   --   5V. At least one of pin 2 or 4
@@ -22,7 +22,6 @@ VCC   --   5V. At least one of pin 2 or 4
 
 Of course the WS2812 can (should) be chained, the DOUT of the first
 connected to the DIN of the next, and so on.
-
 
 ## Setup SPI on Raspberry
 First, enable the SPI hardware module on the SPI, using raspi-config, in
@@ -68,7 +67,7 @@ param_spidev_spi_bus=1
 ```
 Now you get /dev/spidev1.0 (or /dev/spidev0.0 with Orange Pi PC).
 
-Datapin to pin19/SPI1_MOSI/PA15. GND->GND, VCC->5V.
+DIN to pin19/SPI1_MOSI/GPIO15/PA15, GND->GND, VCC->5V.
 
 /etc/udev/rules.d/50-spi.rules:
 ```
