@@ -109,7 +109,7 @@ ws2812.write2812(spi, [[0,10,0], [10,0,0], [0,0,10], [10,10,0]])
 
 ## Problems
 
-## Flickering and first led is always green
+### Flickering and first led is always green
 /usr/local/lib/python3.7/dist-packages/ws2812.py
 
 modify write2812_numpy4(spi,data)-function:
@@ -119,6 +119,9 @@ modify write2812_numpy4(spi,data)-function:
     spi.writebytes(tx.tolist()) # fix flickering
 ```
 or use https://github.com/mcgurk/ws2812-spi/blob/master/ws2812.py
+
+### GRB -> RGB
+todo...
 
 # Notes #
 Note: this module tries to use numpy, if available.
