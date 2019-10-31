@@ -61,12 +61,12 @@ Orange Pi Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59, 31.10.2019
 sudo armbian-config
 System -> Toggle hardware configuration -> spi-spidev
 (didn't specify SPI1, there is no pinout for SPI0, SPI0 is for flash)
-edit /boot/armbianEnv.txt and add "param_spidev_spi_bus=1":
+edit /boot/armbianEnv.txt and add "param_spidev_spi_bus=1" (skip with Orange Pi PC):
 ```
 overlays=spi-spidev usbhost2 usbhost3
 param_spidev_spi_bus=1
 ```
-Now you get /dev/spidev1.0.
+Now you get /dev/spidev1.0 (or /dev/spidev0.0 with Orange Pi PC).
 
 Datapin to pin19/SPI1_MOSI/PA15. GND->GND, VCC->5V.
 
@@ -101,34 +101,27 @@ sudo sed -i 's/str(err)/(str(err))/g' /usr/local/lib/python3.7/dist-packages/ws2
 import spidev
 import ws2812
 spi = spidev.SpiDev()
-spi.open(1,0)
+spi.open(1,0) # use spi.open(0,0) with Orange Pi PC
 
 #write 4 WS2812's, with the following colors: red, green, blue, yellow
 ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
 ```
 
-## problem: first led is always green
-/usr/local/lib/python3.7/dist-packages/ws2812.py
-```
-def write2812(spi, colors):
-  # Optimized version of the `write2812_pylist4` function at:
-  # https://github.com/joosteto/ws2812-spi/blob/master/ws2812.py
-  # with this fix (0x00 at the beginning): https://github.com/joosteto/ws2812-spi/issues/2
-  tx = [0x00] + [
-     ((byte >> (2 * ibit + 1)) & 1) * 0x60 +
-     ((byte >> (2 * ibit + 0)) & 1) * 0x06 +
-     0x88
-     for rgb in colors
-     for byte in rgb # (rgb.g, rgb.r, rgb.b)  # the LED strip is GRB
-     for ibit in range(3, -1, -1)
-  ]
+## Problems
 
-  # Using xfer() or xfer2() in place of writebytes() causes the LEDs to flicker after the 5th one
-  # reports of this bug:
-  # 1) https://github.com/doceme/py-spidev/issues/72
-  # 2) https://github.com/joosteto/ws2812-spi/issues/6
-  spi.writebytes(tx)
+## Flickering
+/usr/local/lib/python3.7/dist-packages/ws2812.py
+
+modify write2812_numpy4(spi,data)-function:
 ```
+    spi.max_speed_hz = int(4/1.05e-6)
+    spi.writebytes(tx.tolist())
+```
+or use https://github.com/mcgurk/ws2812-spi/blob/master/ws2812.py
+
+## First led is always green
+
+No cure?
 
 # Notes #
 Note: this module tries to use numpy, if available.
