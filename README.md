@@ -49,8 +49,8 @@ import ws2812
 spi = spidev.SpiDev()
 spi.open(0,0)
 
-#write 4 WS2812's, with the following colors: red, green, blue, yellow (GRB)
-ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
+#write 4 WS2812's, with the following colors: red, green, blue, yellow
+ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10,10,0]])
 ```
 
 # Orange Pi
@@ -103,8 +103,8 @@ import ws2812
 spi = spidev.SpiDev()
 spi.open(1,0) # use spi.open(0,0) with Orange Pi PC
 
-#write 4 WS2812's, with the following colors: red, green, blue, yellow
-ws2812.write2812(spi, [[0,10,0], [10,0,0], [0,0,10], [10, 10, 0]])
+#write 4 WS2812's, with the following colors: red, green, blue, yellow (GRB)
+ws2812.write2812(spi, [[0,10,0], [10,0,0], [0,0,10], [10,10,0]])
 ```
 
 ## Problems
