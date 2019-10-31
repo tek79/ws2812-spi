@@ -24,7 +24,7 @@ connected to the DIN of the next, and so on.
 
 # Setup SPI on Raspberry #
 First, enable the SPI hardware module on the SPI, using raspi-config, in
-Advanced Options / SPI, and enabeling the SPI interface and the module loading:
+Advanced Options / SPI, and enabling the SPI interface and the module loading:
     sudo raspi-config
 
 
