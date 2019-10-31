@@ -54,7 +54,8 @@ spi.open(0,0)
 ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
 ```
 
-# Orange Pi (Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59)
+# Orange Pi
+Orange Pi Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59, 31.10.2019
 
 ## install
 sudo armbian-config
@@ -79,6 +80,7 @@ sudo groupadd spiuser
 sudo adduser "$USER" spiuser
 sudo udevadm control --reload-rules
 sudo modprobe -r spidev; sudo modprobe spidev
+# logout out and login to update user group
 ```
 
 ## python and modules
@@ -92,6 +94,16 @@ sudo pip3 install git+https://github.com/joosteto/ws2812-spi
 sudo sed -i 's/str(err)/(str(err))/g' /usr/local/lib/python3.7/dist-packages/ws2812.py
 ```
 
+## test
+```
+import spidev
+import ws2812
+spi = spidev.SpiDev()
+spi.open(1,0)
+
+#write 4 WS2812's, with the following colors: red, green, blue, yellow
+ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
+```
 
 # Notes #
 Note: this module tries to use numpy, if available.
