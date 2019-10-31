@@ -56,7 +56,7 @@ ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
 # Orange Pi
 Orange Pi Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59, 31.10.2019
 
-## install
+## Install
 sudo armbian-config
 System -> Toggle hardware configuration -> spi-spidev
 (didn't specify SPI1, there is no pinout for SPI0, SPI0 is for flash)
@@ -82,7 +82,7 @@ sudo modprobe -r spidev; sudo modprobe spidev
 # logout out and login to update user group
 ```
 
-## python and modules
+## Python and modules
 ```
 sudo apt install python3-pip
 sudo pip3 install setuptools
