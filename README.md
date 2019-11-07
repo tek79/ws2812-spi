@@ -84,12 +84,7 @@ sudo modprobe -r spidev; sudo modprobe spidev
 
 ## Python and modules
 ```
-sudo apt install python3-pip
-sudo pip3 install setuptools
-sudo pip3 install wheel
-sudo pip3 install numpy
-sudo apt install libpython3.7-dev
-# (or sudo apt install python3-setuptools python3-dev python3-wheel python3-numpy)
+sudo apt install python3-pip python3-setuptools python3-dev python3-wheel python3-numpy
 sudo pip3 install spidev
 sudo pip3 install git+https://github.com/joosteto/ws2812-spi
 sudo sed -i 's/str(err)/(str(err))/g' /usr/local/lib/python3.7/dist-packages/ws2812.py
