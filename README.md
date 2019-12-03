@@ -59,7 +59,9 @@ Orange Pi Zero, Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59, 31.10.2019
 ## Install
 sudo armbian-config
 System -> Toggle hardware configuration -> spi-spidev
+
 (didn't specify SPI1, there is no pinout for SPI0, SPI0 is for flash)
+
 edit /boot/armbianEnv.txt and add "param_spidev_spi_bus=1" (skip with Orange Pi PC):
 ```
 overlays=spi-spidev usbhost2 usbhost3
