@@ -1,18 +1,18 @@
 #!/usr/bin/python
 import sys
 NumpyImported=False
-#try:
-#    import numpy
-#    from numpy import sin, cos, pi
-#    NumpyImported=True
-#except ImportError:
-#    #print("Warning: no numpy found, routines will be slow")
-#    pass
-if 'numpy' in sys.modules:
-  import numpy
-  NumpyImported=True
-else:
-  print("Warning: no numpy used, routines will be slow")
+try:
+    import numpy
+    from numpy import sin, cos, pi
+    NumpyImported=True
+except ImportError:
+    #print("Warning: no numpy found, routines will be slow")
+    pass
+#if 'numpy' in sys.modules:
+#  import numpy
+#  NumpyImported=True
+#else:
+#  print("Warning: no numpy used, routines will be slow")
 
 """
 T0H: 0.35   -> 2p=0.31  3p=0.47
@@ -79,8 +79,8 @@ if __name__=="__main__":
     usage()
     sys.exit(2)
   color=None
-  nLED=8
-  nSPI=0
+  nLED=1
+  nSPI=1
   doTest=False
   doClear=False
   for o, a in opts:
